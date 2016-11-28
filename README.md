@@ -1,5 +1,6 @@
-# PAPER
+# MyNearestHome
+#### Former PAPER project
 
-### python assisted property retrieval
+### Our goal is to give people simple way to make their new home easy to find.
 
-This is simple site project with some Machine Learning features in it.
+We will try to do our best in implementing different standart algorithms and Machine Learning practices for search of new homes in Moscow.
