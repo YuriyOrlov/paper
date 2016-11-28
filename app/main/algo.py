@@ -49,6 +49,7 @@ def top_five_distances(input_type, input_room, input_address):
                 nearest_spots_list.append([instance.id,dist_btw_spots])
     
     nearest_spots_list.sort(key = get_key_for_sorting) #нужно сделать сортировку в numpy ибо это быстрее
+    
         # sorted_array = sorted(array)
         # array.sort(key=asdf)
     nearest_spots_list = nearest_spots_list[:5]
