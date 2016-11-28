@@ -57,16 +57,22 @@ def real_estate(page = 1):
 @app.route("/results", methods=["POST"])
 def results():  
     if request.method == "POST":
+        with open('static/map_api_key.txt','r') as file:
+            api_key = file.readline()
         input_type = str(request.form['input_type'])
         input_room = validatingType(request.form['input_room'])
         input_address = str(request.form['input_address'])
         #return render_template('test.html', input_type = input_type, input_room = input_room, input_address =  input_address)
-        nearest_spots_ids_list, spot_coords = top_five_distances(input_type,input_room,input_address)
+        nearest_spots_ids_list, spot_coords,center_lat, center_lng = top_five_distances(input_type,input_room,input_address)
         
         ins_id, distance_text, duration_text, duration_value = \
          distance_matrix_walk(nearest_spots_ids_list, spot_coords)
         data = db.session.query(Item).filter(Item.id.in_(ins_id)).all()
+        
         total = db.session.query(Item).filter(Item.id.in_(ins_id)).count()
+        addresses_for_points = list()
+        for instance in range(total):
+            addresses_for_points.append(data[instance].obj_address)
         #date_and_price = db.session.query(Date_and_price).filter(Date_and_price.object_id).limit(int(per_page)).offset(int(offset))
         date_and_price = db.session.query(Date_and_price).filter(Date_and_price.object_id.in_(ins_id)).all()
         date_of_retrieval = db.session.execute("SELECT date_of_parsing FROM date_and_price WHERE date_of_parsing < date('now') ORDER BY date_of_parsing DESC LIMIT 1").first()
@@ -77,7 +83,10 @@ def results():
                                 total = total,
                                 distance_text = distance_text,
                                 duration_text = duration_text,
-                                date_and_price=date_and_price)
+                                date_and_price=date_and_price,
+                                api_key=api_key,
+                                center_lat = center_lat, center_lng = center_lat,
+                                addresses_for_points = addresses_for_points)
     
 
 @app.route('/about_us')

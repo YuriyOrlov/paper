@@ -20,6 +20,7 @@ def top_five_distances(input_type, input_room, input_address):
     #
     spot_lat = geocode_result[0].get('geometry').get('location').get('lat')
     spot_lng = geocode_result[0].get('geometry').get('location').get('lng')
+    #spot_coords_for_result_map = [spot_lat,spot_lng]
     spot_np_array = np.array([spot_lat,spot_lng])
     
     if input_room == 5:
@@ -46,12 +47,18 @@ def top_five_distances(input_type, input_room, input_address):
                 continue
             else:
                 nearest_spots_list.append([instance.id,dist_btw_spots])
-    sorted_nearest_spots = sorted(nearest_spots_list, key = get_key_for_sorting)
-    finding_nearest_spots_id = sorted_nearest_spots[:5]
-    nearest_spots_ids = [finding_nearest_spots_id[item][0] for item in range(len(finding_nearest_spots_id))]
-    #print ((timeit.Timer(lambda: top_five_distances('Москва, Расковой 32'))).timeit(number=1))
-    #время обработки одного запроса алгоритма 211.83238828929416 сек ~ 3 мин 32 сек.
-    return nearest_spots_ids, tuple((spot_lat, spot_lng))
+    
+    nearest_spots_list.sort(key = get_key_for_sorting) #нужно сделать сортировку в numpy ибо это быстрее
+        # sorted_array = sorted(array)
+        # array.sort(key=asdf)
+    nearest_spots_list = nearest_spots_list[:5]
+        # finding_nearest_spots_id = sorted_nearest_spots[:5]
+        # nearest_spots_ids = [finding_nearest_spots_id[item][0] for item in range(len(finding_nearest_spots_id))]
+    nearest_spots_ids = [nearest_spots_list[item][0] for item in range(len(nearest_spots_list))]
+        #print ((timeit.Timer(lambda: top_five_distances('Москва, Расковой 32'))).timeit(number=1))
+        #время обработки одного запроса алгоритма 211.83238828929416 сек ~ 3 мин 32 сек.
+    return nearest_spots_ids, tuple((spot_lat, spot_lng)), spot_lat, spot_lng
+    
 
 
 def distance_matrix_walk(nearest_spots_ids_list, spot_coords):
