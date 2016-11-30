@@ -13,14 +13,12 @@ jdatetime==1.8.1
 Jinja2==2.8
 lxml==3.6.4
 MarkupSafe==0.23
-numpy==1.11.2
 PySocks==1.5.6
 python-dateutil==2.6.0
 pytz==2016.7
 regex==2016.11.21
 requests==2.11.1
 ruamel.yaml==0.13.0
-scipy==0.18.1
 six==1.10.0
 SQLAlchemy==1.1.4
 typing==3.5.2.2

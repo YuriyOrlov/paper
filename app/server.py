@@ -5,9 +5,9 @@ sys.path.insert(0,'migrations/items_data.sqlite')
 from flask import Flask, abort, request, render_template
 from flask_bootstrap import Bootstrap
 import datetime as dt
-from app.irr_.IO_Ldr import out_of_file
-from flask_sqlalchemy import SQLAlchemy, BaseQuery
-from app.migrations.d_base import Item, Date_and_price
+from irr_.IO_Ldr import out_of_file
+#from flask_sqlalchemy import SQLAlchemy, BaseQuery
+from migrations.d_base import Item, Date_and_price, db_session
 from sqlalchemy import desc
 from dateparser import parse
 from main.algo import get_key_for_sorting, top_five_distances,distance_matrix_walk
@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///migrations/items_data.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bootstrap = Bootstrap(app)
-db = SQLAlchemy(app)
+#db = SQLAlchemy(app)
 
 
 
@@ -40,9 +40,9 @@ def index():
 @app.route('/real_estate/page/<int:page>')
 def real_estate(page = 1):    
     page, per_page, offset = page, 20, 0 #вот тут сломалась пагинация, нужно, чтобы per_page и offset сдвигался на каждой новой странице
-    data = db.session.query(Item).filter(Item.id).limit(int(per_page)).offset(int(offset))
-    date_and_price = db.session.query(Date_and_price).filter(Date_and_price.id).limit(int(per_page)).offset(int(offset))
-    total = db.session.query(Item).filter(Item.id).count()
+    data = db_session.query(Item).filter(Item.id).limit(int(per_page)).offset(int(offset))
+    date_and_price = db_session.query(Date_and_price).filter(Date_and_price.id).limit(int(per_page)).offset(int(offset))
+    total = db_session.query(Item).filter(Item.id).count()
     date_of_retrieval = db.session.execute("SELECT date_of_parsing FROM date_and_price WHERE date_of_parsing < date('now') ORDER BY date_of_parsing DESC LIMIT 1").first()
     date_of_retrieval = (parse(str(date_of_retrieval))).strftime('%d-%m-%Y') if date_of_retrieval else None
     return render_template('real_estate2.html',
@@ -67,15 +67,15 @@ def results():
         
         ins_id, distance_text, duration_text, duration_value = \
          distance_matrix_walk(nearest_spots_ids_list, spot_coords)
-        data = db.session.query(Item).filter(Item.id.in_(ins_id)).all()
+        data = db_session.query(Item).filter(Item.id.in_(ins_id)).all()
         
-        total = db.session.query(Item).filter(Item.id.in_(ins_id)).count()
+        total = db_session.query(Item).filter(Item.id.in_(ins_id)).count()
         addresses_for_points = list()
         for instance in range(total):
             addresses_for_points.append(data[instance].obj_address)
         #date_and_price = db.session.query(Date_and_price).filter(Date_and_price.object_id).limit(int(per_page)).offset(int(offset))
-        date_and_price = db.session.query(Date_and_price).filter(Date_and_price.object_id.in_(ins_id)).all()
-        date_of_retrieval = db.session.execute("SELECT date_of_parsing FROM date_and_price WHERE date_of_parsing < date('now') ORDER BY date_of_parsing DESC LIMIT 1").first()
+        date_and_price = db_session.query(Date_and_price).filter(Date_and_price.object_id.in_(ins_id)).all()
+        date_of_retrieval = db_session.execute("SELECT date_of_parsing FROM date_and_price WHERE date_of_parsing < date('now') ORDER BY date_of_parsing DESC LIMIT 1").first()
         date_of_retrieval = (parse(str(date_of_retrieval))).strftime('%d-%m-%Y') if date_of_retrieval else None
         return render_template('results.html',
                                 data=data,
