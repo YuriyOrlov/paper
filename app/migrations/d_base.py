@@ -4,7 +4,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker,relationship
 from sqlalchemy.ext.declarative import declarative_base
 import logging
 
-engine = create_engine('sqlite:///items_data.sqlite')
+engine = create_engine('sqlite:///migrations/items_data.sqlite')
 
 db_session = scoped_session(sessionmaker(bind=engine))
 

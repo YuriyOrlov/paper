@@ -1,6 +1,6 @@
 import googlemaps
 #from paar.app.server import db
-from app.migrations.d_base import Item, db_session
+from migrations.d_base import Item, db_session
 import numpy as np
 from scipy.spatial import distance
 
