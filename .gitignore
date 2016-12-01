@@ -6,6 +6,8 @@
 *.json
 app/env/
 app/venv/
+flask
+__pycache__
 *.sqlite
 <<<<<<< HEAD
 <<<<<<< HEAD
