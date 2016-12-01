@@ -4,7 +4,7 @@
 *.txt
 *.png
 *.json
-app/env/
+env/
 app/venv/
 *.sqlite
 <<<<<<< HEAD
