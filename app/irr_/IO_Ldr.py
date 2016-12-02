@@ -7,24 +7,24 @@ import csv
 #from sys import stdin
 import re
 
-def read_proxie_list(filename):
-    if isfile(filename):
-        with open(filename,'r',encoding = 'utf-8') as f:
-            proxie_string =  f.read()
-        proxie_list = (proxie_string).split('\n')          
-        return proxie_list
-    else:
-        return 'File not found'
+# def read_proxie_list(filename):
+#     if isfile(filename):
+#         with open(filename,'r',encoding = 'utf-8') as f:
+#             proxie_string =  f.read()
+#         proxie_list = (proxie_string).split('\n')          
+#         return proxie_list
+#     else:
+#         return 'File not found'
 
-def read_socks_list(filename):
-    if isfile(filename):
-        with open(filename,'r',encoding = 'utf-8') as f:
-            proxie_string =  f.read()
-        proxie_list = (proxie_string).split('\n')        
-        proxie = {'http':'{}'.format(random.choice(proxie_list))}        
-        return proxie_list
-    else:
-        return 'File not found'
+# def read_socks_list(filename):
+#     if isfile(filename):
+#         with open(filename,'r',encoding = 'utf-8') as f:
+#             proxie_string =  f.read()
+#         proxie_list = (proxie_string).split('\n')        
+#         proxie = {'http':'{}'.format(random.choice(proxie_list))}        
+#         return proxie_list
+#     else:
+#         return 'File not found'
 
 def into_file_(dict_ = dict()):
     try:
