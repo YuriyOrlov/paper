@@ -17,24 +17,17 @@ def top_five_distances(input_type, input_room, input_address):
     gmaps = googlemaps.Client(key=api_key)
     geocode_result = gmaps.geocode(input_address)
 
-    # here i need if statment with
-    #   returned answer from Google
-    #
     spot_lat = geocode_result[0].get('geometry').get('location').get('lat')
     spot_lng = geocode_result[0].get('geometry').get('location').get('lng')
-    # spot_coords_for_result_map = [spot_lat,spot_lng]
     spot_np_array = np.array([spot_lat, spot_lng])
 
-    # if input_room == 5:
-    #     objects_wth_coords_lst = db_session.query(Item).filter(Item.lat != None).filter(Item.lng != None)\
-    #     .filter(Item.obj_type == input_type).filter(Item.rooms >= input_room).all()
-    # else:
-    #     objects_wth_coords_lst = db_session.query(Item). \
-    #      filter(Item.lat != None).filter(Item.lng != None) \
-    #      .filter(Item.obj_type == input_type).filter(Item.rooms == input_room).all()
-
-    objects_wth_coords_lst = db_session.query(Item). \
-         filter(Item.lat != None).filter(Item.lng != None).all()
+    if input_room == 5:
+        objects_wth_coords_lst = db_session.query(Item).filter(Item.lat != None).filter(Item.lng != None)\
+        .filter(Item.obj_type == input_type).filter(Item.rooms >= input_room).all()
+    else:
+        objects_wth_coords_lst = db_session.query(Item). \
+         filter(Item.lat != None).filter(Item.lng != None) \
+         .filter(Item.obj_type == input_type).filter(Item.rooms == input_room).all()
 
     distance_spots_list = np.array([]).reshape(0, 2)
     all_spots = np.array([]).reshape(0, 3)
@@ -86,5 +79,4 @@ def distance_matrix_walk(nearest_spots_ids_list, spot_coords):
 #           (name[item], distance_text[item], duration_text[item]))
 
 if __name__ == '__main__':
-    # (timeit.Timer(top_five_distances('Москва, Расковой 32'))).timeit(number=1)
     main()
