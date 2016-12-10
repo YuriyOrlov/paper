@@ -1,7 +1,4 @@
 import sys
-
-sys.path.insert(0,'migrations/items_data.sqlite')
-
 from flask import Flask, abort, request, render_template
 from flask_bootstrap import Bootstrap
 import datetime as dt
@@ -12,12 +9,14 @@ from sqlalchemy import desc
 from dateparser import parse
 from main.algo import get_key_for_sorting, top_five_distances,distance_matrix_walk
 
+
+sys.path.insert(0,'migrations/items_data.sqlite')
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///migrations/items_data.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bootstrap = Bootstrap(app)
 #db = SQLAlchemy(app)
-
 
 
 def validatingType(variable):
