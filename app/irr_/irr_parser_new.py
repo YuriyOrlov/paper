@@ -6,26 +6,26 @@ from datetime import datetime as dt_
 from dateparser import parse
 
 
-def urls_for_items(url,proxie):
-    data = requests.get(url, proxies = proxie)
+def urls_for_items(url, proxie):
+    data = requests.get(url, proxies=proxie)
     s_data = bs_(data.text, 'lxml')
-    return [item.get('href') for item in s_data.find_all("a",{"class":"listing__itemTitle js-productListingProductName"})]
+    return [item.get('href') for item in s_data.find_all("a", {"class": "listing__itemTitle js-productListingProductName"})]
 
-def retrieving_last_possible_page(url,proxie):
-    data = requests.get(url, proxies = proxie)
+def retrieving_last_possible_page(url, proxie):
+    data = requests.get(url, proxies=proxie)
     s_data = bs_(data.text, 'lxml')
-    list_of_pages_from_pagination = s_data.find_all("a",class_=re.compile('esLink'))
+    list_of_pages_from_pagination = s_data.find_all("a", class_=re.compile('esLink'))
     last_page_from_pagination = list_of_pages_from_pagination[-1].text if len(list_of_pages_from_pagination) != 0 else None
     return int(last_page_from_pagination) if last_page_from_pagination else None
 
 
-def retrieving_additional_information_about_object_from_description(parsed_data,type_of_object):
-    object_characteristics_tags = parsed_data.find('span',class_=re.compile('Value'))
-    if object_characteristics_tags != None:
-        object_characteristics_tags = parsed_data.find_all('span',class_=re.compile('Value'))  
-    
+def retrieving_additional_information_about_object_from_description(parsed_data, type_of_object):
+    object_characteristics_tags = parsed_data.find('span', class_=re.compile('Value'))
+    if object_characteristics_tags:
+        object_characteristics_tags = parsed_data.find_all('span', class_=re.compile('Value'))
+
         number_finder = re.compile('[0-9.]+')
-        if len(object_characteristics_tags) == 3:           
+        if len(object_characteristics_tags) == 3:
             number_of_rooms = object_characteristics_tags[0].text
             total_space = number_finder.search(object_characteristics_tags[1].text).group(0)
             list_with_information_about_floors = number_finder.findall(object_characteristics_tags[2].text)
@@ -33,12 +33,10 @@ def retrieving_additional_information_about_object_from_description(parsed_data,
                 floor_number, total_number_of_floors = list_with_information_about_floors
             else:
                 floor_number, total_number_of_floors = list_with_information_about_floors, None
-            return {
-            'number_of_rooms':number_of_rooms, 
-            'total_space':total_space, 
-            'floor_number':floor_number, 
-            'total_number_of_floors':total_number_of_floors,
-            }
+            return {'number_of_rooms': number_of_rooms,
+                    'total_space': total_space,
+                    'floor_number': floor_number,
+                    'total_number_of_floors': total_number_of_floors, }
         elif len(object_characteristics_tags) == 4:
             number_of_rooms = object_characteristics_tags[0].text
             total_space = number_finder.search(object_characteristics_tags[1].text).group(0)
@@ -48,13 +46,11 @@ def retrieving_additional_information_about_object_from_description(parsed_data,
                 floor_number, total_number_of_floors = list_with_information_about_floors
             else:
                 floor_number, total_number_of_floors = list_with_information_about_floors, None
-            return {
-            'number_of_rooms':number_of_rooms, 
-            'total_space':total_space,
-            'living_space':living_space,
-            'floor_number':floor_number, 
-            'total_number_of_floors':total_number_of_floors,
-            }       
+            return {'number_of_rooms': number_of_rooms,
+                    'total_space': total_space,
+                    'living_space': living_space,
+                    'floor_number': floor_number,
+                    'total_number_of_floors': total_number_of_floors, }
         elif len(object_characteristics_tags) == 2:
             number_of_rooms = object_characteristics_tags[0].text
             list_with_information_about_floors = number_finder.findall(object_characteristics_tags[1].text)
@@ -62,11 +58,9 @@ def retrieving_additional_information_about_object_from_description(parsed_data,
                 floor_number, total_number_of_floors = list_with_information_about_floors
             else:
                 floor_number, total_number_of_floors = list_with_information_about_floors, None
-            return {
-            'number_of_rooms':number_of_rooms,      
-            'floor_number':floor_number, 
-            'total_number_of_floors':total_number_of_floors,
-            }       
+            return {'number_of_rooms': number_of_rooms,
+                    'floor_number': floor_number,
+                    'total_number_of_floors': total_number_of_floors, }
         else:       
             return {
             'number_of_rooms':None, 
@@ -259,7 +253,8 @@ def main():
     result.append((dt_.now()).strftime("%d-%m-%Y %H:%M:%S"))
     into_json_(result)
 
-    print ("\nFile saved succesfully.")
+    print("\nFile saved succesfully.")
+
 
 if __name__ == "__main__":
     main()

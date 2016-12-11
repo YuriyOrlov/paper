@@ -20,14 +20,12 @@ def top_five_distances(input_type, input_room, input_address):
     spot_lat = geocode_result[0].get('geometry').get('location').get('lat')
     spot_lng = geocode_result[0].get('geometry').get('location').get('lng')
     spot_np_array = np.array([spot_lat, spot_lng])
-
+    query = db_session.query(Item).filter(Item.lat != None).filter(Item.lng != None)
+    query = query.filter(Item.obj_type == input_type)
     if input_room == 5:
-        objects_wth_coords_lst = db_session.query(Item).filter(Item.lat != None).filter(Item.lng != None)\
-        .filter(Item.obj_type == input_type).filter(Item.rooms >= input_room).all()
+        objects_wth_coords_lst = query.filter(Item.rooms >= input_room).all()
     else:
-        objects_wth_coords_lst = db_session.query(Item). \
-         filter(Item.lat != None).filter(Item.lng != None) \
-         .filter(Item.obj_type == input_type).filter(Item.rooms == input_room).all()
+        objects_wth_coords_lst = query.filter(Item.rooms == input_room).all()
 
     distance_spots_list = np.array([]).reshape(0, 2)
     all_spots = np.array([]).reshape(0, 3)
