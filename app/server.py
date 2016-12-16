@@ -1,22 +1,15 @@
 import sys
-from flask import Flask, abort, request, render_template
+from flask import Flask, request, render_template
 from flask_bootstrap import Bootstrap
-import datetime as dt
-from irr_.IO_Ldr import out_of_file
-#from flask_sqlalchemy import SQLAlchemy, BaseQuery
 from migrations.d_base import Item, Date_and_price, db_session
-from sqlalchemy import desc
 from dateparser import parse
-from main.algo import get_key_for_sorting, top_five_distances,distance_matrix_walk
 
-
-sys.path.insert(0,'migrations/items_data.sqlite')
+sys.path.insert(0, 'migrations/items_data.sqlite')
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///migrations/items_data.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bootstrap = Bootstrap(app)
-#db = SQLAlchemy(app)
 
 
 def validatingType(variable):
@@ -26,9 +19,10 @@ def validatingType(variable):
     except ValueError:
         return None
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
-    with open('static/map_api_key.txt','r') as file:
+    with open('static/map_api_key.txt', 'r') as file:
         api_key = file.readline()
     return render_template('index.html', api_key=api_key)
 
