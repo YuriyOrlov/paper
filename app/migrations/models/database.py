@@ -1,8 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy as SQLAlchemyBase
-
 from ..models.base import set_query_property
 
-class SQLAlchemy(SQLAlchemyBase):    
+
+class SQLAlchemy(SQLAlchemyBase):
     def __init__(self,
                  app=None,
                  use_native_unicode=True,

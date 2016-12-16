@@ -1,11 +1,13 @@
 *.sublime-project
 *.sublime-workspace
 *.csv
-*.txt
 *.png
 *.json
 app/env/
 app/venv/
+flask
+/flask
+__pycache__
 *.sqlite
 <<<<<<< HEAD
 <<<<<<< HEAD

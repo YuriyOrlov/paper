@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+# -*-coding: UTF-8 -*-
+>>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
 import codecs
 import json
 import os
@@ -5,6 +9,28 @@ from os.path import isfile
 import csv
 # from sys import stdin
 
+<<<<<<< HEAD
+=======
+# def read_proxie_list(filename):
+#     if isfile(filename):
+#         with open(filename,'r',encoding = 'utf-8') as f:
+#             proxie_string =  f.read()
+#         proxie_list = (proxie_string).split('\n')
+#         return proxie_list
+#     else:
+#         return 'File not found'
+
+# def read_socks_list(filename):
+#     if isfile(filename):
+#         with open(filename,'r',encoding = 'utf-8') as f:
+#             proxie_string =  f.read()
+#         proxie_list = (proxie_string).split('\n')
+#         proxie = {'http':'{}'.format(random.choice(proxie_list))}
+#         return proxie_list
+#     else:
+#         return 'File not found'
+
+>>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
 
 def into_file_(dict_=dict()):
     try:
@@ -19,6 +45,10 @@ def into_file_(dict_=dict()):
 
         with codecs.open('./items_.json', 'w', 'cp1251') as f_out:
             f_out.write(json.dumps(data, skipkeys=True, indent=4))
+<<<<<<< HEAD
+=======
+
+>>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
     else:
         with codecs.open('./items_.json', 'w', 'cp1251') as f_out:
             f_out.write(json.dumps(dict_, skipkeys=True, indent=4))
@@ -72,6 +102,11 @@ def out_of_csv(filename):
     with codecs.open(filename, 'r', 'cp1251') as csv_file:
         reader = csv.reader(csv_file, delimiter=';')
         return [row for row in reader]
+<<<<<<< HEAD
+=======
+# test = stdin.readline()#input('Введи приветствие: ')
+# print (add_phrase(test))
+>>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
 
 
 if __name__ == "__main__":

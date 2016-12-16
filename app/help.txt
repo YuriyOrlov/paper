@@ -1,0 +1,9 @@
+# Просто интересные заметки
+
+
+1. Как переименовать коллонки в numpy и сменить им формат данных
+    dt=np.dtype([('id',np.int),('y',np.float)])
+    myRecord = np.core.records.array(list(tuple(test_sort.transpose())), dtype=dt)
+
+2. Как отсортировать по определённому элементу    
+    test_sort[test_sort[:,1].argsort()]
