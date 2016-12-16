@@ -61,8 +61,12 @@ def results():
         ins_id, distance_text, duration_text, duration_value = \
          distance_matrix_walk(nearest_spots_ids_list, spot_coords)
         data = db_session.query(Item).filter(Item.id.in_(ins_id)).all()
-        
+        print (data)
         total = db_session.query(Item).filter(Item.id.in_(ins_id)).count()
+        print (total)
+        if total == 0:
+            return render_template('not_found.html')
+        
         addresses_for_points = list()
         for instance in range(total):
             addresses_for_points.append(data[instance].obj_address)
