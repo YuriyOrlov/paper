@@ -1,15 +1,9 @@
 import sys
 from flask import Flask, request, render_template
 from flask_bootstrap import Bootstrap
-<<<<<<< HEAD
-from migrations.d_base import Item, Date_and_price, db_session
-from dateparser import parse
-=======
-from flask_sqlalchemy import SQLAlchemy
 from migrations.d_base import Item, Date_and_price, db_session
 from dateparser import parse
 from main.algo import top_five_distances, distance_matrix_walk
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
 
 sys.path.insert(0, 'migrations/items_data.sqlite')
 
@@ -17,10 +11,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///migrations/items_data.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bootstrap = Bootstrap(app)
-<<<<<<< HEAD
-=======
-db = SQLAlchemy(app)
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
 
 
 def validatingType(variable):
@@ -42,12 +32,14 @@ def index():
 @app.route('/real_estate', defaults={'page': 1})
 @app.route('/real_estate/page/<int:page>/')
 @app.route('/real_estate/page/<int:page>')
-def real_estate(page=1):
-    # FIXME: pagination issues, per_page & offset must rotate every new page
-    page, per_page, offset = page, 20, 0
+def real_estate(page=1):    
+    if page == 1:
+        page, per_page, offset = page, 20, 0
+    else:
+        page, per_page, offset = page, 20, page * 20
     data = db_session.query(Item).filter(Item.id).limit(int(per_page)).offset(int(offset))
     date_and_price = db_session.query(Date_and_price).filter(Date_and_price.id).limit(int(per_page)).offset(int(offset))
-    date_of_retrieval = db.session.execute("SELECT date_of_parsing "
+    date_of_retrieval = db_session.execute("SELECT date_of_parsing "
                                            "FROM date_and_price "
                                            "WHERE date_of_parsing < date('now') "
                                            "ORDER BY date_of_parsing DESC LIMIT 1").first()
@@ -69,21 +61,14 @@ def results():
         input_type = str(request.form['input_type'])
         input_room = validatingType(request.form['input_room'])
         input_address = str(request.form['input_address'])
-        #return render_template('test.html', input_type = input_type, input_room = input_room, input_address =  input_address)
         nearest_spots, spot_coords, center_lat, center_lng = top_five_distances(input_type, input_room, input_address)
 
         ins_id, distance_text, duration_text, duration_value = distance_matrix_walk(nearest_spots, spot_coords)
         data = db_session.query(Item).filter(Item.id.in_(ins_id)).all()
-<<<<<<< HEAD
-        print (data)
-=======
-
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
         total = db_session.query(Item).filter(Item.id.in_(ins_id)).count()
-        print (total)
         if total == 0:
             return render_template('not_found.html')
-        
+
         addresses_for_points = list()
         for instance in range(total):
             addresses_for_points.append(data[instance].obj_address)
