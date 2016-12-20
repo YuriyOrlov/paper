@@ -17,11 +17,8 @@ class Loading_parsed_data_irr(object):
             self.db_exist = True
 
     def test_item_before_adding(self, item):
-<<<<<<< HEAD
         if (item['rooms'] is not None) and (item['area'] is not None) and (item['floor'] is not None):
-=======
-        if item['rooms'] and item['area'] and item['floor']:
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
+
             if type(item['floor']) == list:
                 rooms_int = item['rooms']
                 area_int = item['area']
@@ -48,31 +45,18 @@ class Loading_parsed_data_irr(object):
         for obj in range(len(data) - 1):
             rooms_int, area_int, floor_int = self.test_item_before_adding(data[obj])
             testing_object = Item.query.filter(Item.href == data[obj]['href']).first()
-<<<<<<< HEAD
             if testing_object is None:
                 _object = Item(
                     data[obj].get('type'), data[obj].get('name'), data[obj]['obj_address'],
                     data[obj].get('metro_station'), rooms_int, area_int, data[obj].get('href'),
                     data[obj].get('source'), floor_int)
-=======
-            if not testing_object:
-                _object = Item(obj_type=data[obj].get('type'),
-                               name=data[obj].get('name'),
-                               obj_address=data[obj]['obj_address'],
-                               metro_station=data[obj].get('metro_station'),
-                               rooms=rooms_int,
-                               area=area_int,
-                               href=data[obj].get('href'),
-                               source=data[obj].get('source'),
-                               floor=floor_int)
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
             else:
                 pass
             db_session.add(_object)
 
         db_session.commit()
 
-<<<<<<< HEAD
+
     def addding_price_data_to_db(self, data):
         for est in range(len(data) - 1):
             _item = Item.query.filter(Item.href == data[est]['href']).first()
@@ -81,16 +65,6 @@ class Loading_parsed_data_irr(object):
                 data[est].get('price'),
                 datetime.datetime.strptime(data[est].get('date'), '%d-%m-%Y'),
                 datetime.datetime.strptime(data[-1], '%d-%m-%Y %H:%M:%S'), _item.id)
-=======
-    def add_price(self, data):
-        for est in range(len(data) - 1):
-            _item = Item.query.filter(Item.href == data[est]['href']).first()
-            _item_test = Date_and_price.query.get(_item.id)
-            dt_pr = Date_and_price(price=data[est].get('price'),
-                                   date_of_creation=datetime.datetime.strptime(data[est].get('date'), '%d-%m-%Y'),
-                                   date_of_parsing=datetime.datetime.strptime(data[-1], '%d-%m-%Y %H:%M:%S'),
-                                   objet_id=_item.id)
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
             if _item_test is None:
                 db_session.add(dt_pr)
             else:
@@ -100,30 +74,18 @@ class Loading_parsed_data_irr(object):
 
     def db_load(self):
         if self.db_exist is False:
-<<<<<<< HEAD
-            print ('Creating database structure...')
-            call('python d_base.py', shell=True)
-            print ('\nImporting data from .json file...')
-            self.adding_items_to_db(self.list_with_data)
-            self.addding_price_data_to_db(self.list_with_data)
-            print ('Data import completed succesfully.')
-        else:
-            print ('\nUpdating database...')
-=======
             print('Creating database structure...')
             call('python d_base.py', shell=True)
             print('\nImporting data from .json file...')
             self.adding_items_to_db(self.list_with_data)
-            self.add_price(self.list_with_data)
+            self.addding_price_data_to_db(self.list_with_data)
             print('Data import completed succesfully.')
         else:
             print('\nUpdating database...')
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
             for obj in range(len(data) - 1):
                 _item = Item.query.filter(Item.href == data[obj]['href']).first()
                 rooms_int, area_int, floor_int = self.test_item_before_adding(data[obj])
                 if _item is None:
-<<<<<<< HEAD
                     _object = Item(
                         data[obj]['type'], data[obj]['name'], data[obj]['obj_address'],
                         data[obj]['metro_station'], rooms_int, area_int, data[obj]['href'],
@@ -143,44 +105,18 @@ class Loading_parsed_data_irr(object):
                 """
                 DELETE FROM date_and_price WHERE rowid NOT IN (SELECT min(rowid)
                 FROM date_and_price GROUP BY price, date_of_creation,date_of_parsing,object_id)""")
-=======
-                    _object = Item(obj_type=data[obj].get('type'),
-                                   name=data[obj].get('name'),
-                                   obj_address=data[obj]['obj_address'],
-                                   metro_station=data[obj].get('metro_station'),
-                                   rooms=rooms_int,
-                                   area=area_int,
-                                   href=data[obj].get('href'),
-                                   source=data[obj].get('source'),
-                                   floor=floor_int)
-
-                    db_session.add(_object)
-                    _item = Item.query.filter(Item.href == data[obj]['href']).first()
-                dt_pr = Date_and_price(price=data[obj].get('price'),
-                                       date_of_creation=datetime.datetime.strptime(data[obj].get('date'), '%d-%m-%Y'),
-                                       date_of_parsing=datetime.datetime.strptime(data[-1], '%d-%m-%Y %H:%M:%S'),
-                                       objet_id=_item.id)
-                db_session.add(dt_pr)
-            db_session.execute("DELETE FROM date_and_price "
-                               "WHERE rowid NOT IN "
-                               "(SELECT min(rowid) "
-                               "FROM date_and_price "
-                               "GROUP BY price, date_of_creation,date_of_parsing,object_id)")
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
             db_session.commit()
             print("\nDatabase updated.")
 
-class Loading_parsed_data_cian(Loading_parsed_data_irr):
-<<<<<<< HEAD
-    """docstring for Loading_parsed_data_cian"""
-=======
 
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
+class Loading_parsed_data_cian(Loading_parsed_data_irr):
+
+    """docstring for Loading_parsed_data_cian"""
+
     def __init__(self, list_with_data, db_exist=False):
         super(Loading_parsed_data_cian, self).__init__(list_with_data, db_exist)
 
     def test_item_before_adding(self, item):
-<<<<<<< HEAD
         if (item.get('rooms') is not None) and (item.get('area') is not None) and (item.get('floor') is not None):
             if type(item.get('floor')) == str:
                 rooms_test = item.get('rooms')
@@ -192,12 +128,6 @@ class Loading_parsed_data_cian(Loading_parsed_data_irr):
             else:
                 rooms_test = item.get('rooms')
                 area_test = item.get('area')
-=======
-        if item.get('rooms') and item.get('area') and item.get('floor'):
-            if type(item.get('floor')) == str:
-                floor_test = re.findall('[0-9.]+', item.get('floor'))
-            else:
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
                 floor_test = item.get('floor')
             rooms_test = item.get('rooms')
             area_test = item.get('area')
@@ -216,22 +146,10 @@ class Loading_parsed_data_cian(Loading_parsed_data_irr):
             rooms_int, area_int, floor_int = self.test_item_before_adding(data[obj])
             testing_object = Item.query.filter(Item.href == data[obj]['href']).first()
             if testing_object is None:
-<<<<<<< HEAD
                 _object = Item(
                     data[obj].get('type'), data[obj].get('name'), data[obj]['obj_address'],
                     data[obj].get('metro_station'), rooms_int, area_int, data[obj].get('href'),
                     data[obj].get('source'), floor_int)
-=======
-                _object = Item(obj_type=data[obj].get('type'),
-                               name=data[obj].get('name'),
-                               obj_address=data[obj]['obj_address'],
-                               metro_station=data[obj].get('metro_station'),
-                               rooms=rooms_int,
-                               area=area_int,
-                               href=data[obj].get('href'),
-                               source=data[obj].get('source'),
-                               floor=floor_int)
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
             else:
                 pass
             db_session.add(_object)
@@ -243,7 +161,6 @@ class Loading_parsed_data_cian(Loading_parsed_data_irr):
             if _item is None:
                 continue
             else:
-<<<<<<< HEAD
                 _item_test = Date_and_price.query.get(_item.id)
                 dt_pr = Date_and_price(
                     data[est].get('price'), None,
@@ -254,47 +171,24 @@ class Loading_parsed_data_cian(Loading_parsed_data_irr):
                     if (
                         _item_test.price, _item_test.date_of_creation, _item_test.date_of_parsing,
                         _item_test.object_id) == (dt_pr.price, dt_pr.date_of_creation, dt_pr.date_of_parsing, dt_pr.object_id):
-=======
-                _item_test = Date_and_price(price=data[est].get('price'),
-                                            date_of_parsing=datetime.datetime.strptime(data[est].get('date'),
-                                                                                       '%d-%m-%Y %H:%M:%S'),
-                                            objet_id=_item.id)
-
-                if _item_test is None:
-                    db_session.add(dt_pr)
-                else:
-                    if (_item_test.price, _item_test.date_of_creation, _item_test.date_of_parsing,
-                            _item_test.object_id) == (dt_pr.price, dt_pr.date_of_creation, dt_pr.date_of_parsing, dt_pr.object_id):
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
                         pass
         db_session.commit()
 
     def db_load(self):
         if self.db_exist is False:
-<<<<<<< HEAD
-            print ('Creating database structure...')
-            call('python d_base.py', shell=True)
-            print ('\nImporting data from .json file...')
-            self.adding_items_to_db(self.list_with_data)
-            self.addding_price_data_to_db(self.list_with_data)
-            print ('Data import completed succesfully.')
-        else:
-            print ('\nUpdating database...')
-=======
+
             print('Creating database structure...')
             call('python d_base.py', shell=True)
             print('\nImporting data from .json file...')
             self.adding_items_to_db(self.list_with_data)
-            self.add_price(self.list_with_data)
+            self.addding_price_data_to_db(self.list_with_data)
             print('Data import completed succesfully.')
         else:
             print('\nUpdating database...')
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
             for obj in range(len(data)):
                 _item = Item.query.filter(Item.href == data[obj]['href']).first()
                 rooms_int, area_int, floor_int = self.test_item_before_adding(data[obj])
                 if _item is None:
-<<<<<<< HEAD
                     _object = Item(
                         data[obj]['type'], data[obj]['name'], data[obj]['obj_address'],
                         data[obj]['metro_station'], rooms_int, area_int, data[obj]['href'],
@@ -312,31 +206,9 @@ class Loading_parsed_data_cian(Loading_parsed_data_irr):
                     db_session.add(dt_pr)
             db_session.execute("""DELETE FROM date_and_price WHERE rowid NOT IN
                 (SELECT min(rowid) FROM date_and_price GROUP BY price, object_id)""")
-=======
-                    _object = Item(obj_type=data[obj].get('type'),
-                                   name=data[obj].get('name'),
-                                   obj_address=data[obj]['obj_address'],
-                                   metro_station=data[obj].get('metro_station'),
-                                   rooms=rooms_int,
-                                   area=area_int,
-                                   href=data[obj].get('href'),
-                                   source=data[obj].get('source'),
-                                   floor=floor_int)
-                    db_session.add(_object)
-                    _item = Item.query.filter(Item.href == data[obj]['href']).first()
-                dt_pr = Date_and_price(price=data[obj].get('price'),
-                                       date_of_parsing=datetime.datetime.strptime(data[obj].get('date'),
-                                                                                  '%d-%m-%Y %H:%M:%S'),
-                                       objet_id=_item.id)
-                db_session.add(dt_pr)
-            db_session.execute("DELETE FROM date_and_price "
-                               "WHERE rowid NOT IN "
-                               "(SELECT min(rowid) "
-                               "FROM date_and_price "
-                               "GROUP BY price, object_id)")
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
             db_session.commit()
         print("\nDatabase updated.")
+
 
 if __name__ == '__main__':
     # data = out_of_file('../irr_/items_.json')

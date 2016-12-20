@@ -9,11 +9,9 @@ db_session = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base()
 Base.query = db_session.query_property()
 
-<<<<<<< HEAD
-# # Creating a logger and a log file for debugging
-=======
+
 # Creating a logger and a log file for debugging
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
+
 # handler = logging.FileHandler('sqlalchemy.engine.log')
 # handler.level = logging.DEBUG
 # logging.getLogger('sqlalchemy.engine').addHandler(handler)
@@ -37,14 +35,8 @@ class Item(Base):
 
     relashion_btw_date_price_object = relationship('Date_and_price', backref='rel_date_price')
 
-<<<<<<< HEAD
     def __init__(self, obj_type=None, name=None, obj_address=None, metro_station=None,
                  rooms=None, area=None, href=None, source=None, floor=None, lat=None, lng=None, is_valid=True):
-=======
-    def __init__(self, obj_type=None, name=None, obj_address=None,
-                 metro_station=None, rooms=None, area=None, href=None,
-                 source=None, floor=None, lat=None, lng=None, is_valid=True):
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
 
         self.obj_type = obj_type
         self.name = name
@@ -61,23 +53,10 @@ class Item(Base):
 
     def __repr__(self):
         return '{} {} {} {} {} {} {} {} {} {} {}'.format(self.obj_type,
-<<<<<<< HEAD
+
                                                          self.name, self.obj_address, self.metro_station, self.rooms,
                                                          self.area, self.href, self.source, self.floor, self.lat,
                                                          self.lng, self.is_valid)
-=======
-                                                         self.name,
-                                                         self.obj_address,
-                                                         self.metro_station,
-                                                         self.rooms,
-                                                         self.area,
-                                                         self.href,
-                                                         self.source,
-                                                         self.floor,
-                                                         self.lat,
-                                                         self.lng,
-                                                         self.is_valid)
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
 
 
 class Date_and_price(Base):

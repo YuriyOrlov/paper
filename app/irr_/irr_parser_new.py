@@ -9,35 +9,26 @@ from dateparser import parse
 def urls_for_items(url, proxie):
     data = requests.get(url, proxies=proxie)
     s_data = bs_(data.text, 'lxml')
-<<<<<<< HEAD
+
     return [item.get('href') for item in s_data.find_all(
         "a", {"class": "listing__itemTitle js-productListingProductName"})]
 
 
-=======
-    return [item.get('href') for item in s_data.find_all("a", {"class": "listing__itemTitle js-productListingProductName"})]
-
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
 def retrieving_last_possible_page(url, proxie):
     data = requests.get(url, proxies=proxie)
     s_data = bs_(data.text, 'lxml')
     list_of_pages_from_pagination = s_data.find_all("a", class_=re.compile('esLink'))
-<<<<<<< HEAD
+
     last_page_from_pagination = list_of_pages_from_pagination[-1].text if len(
         list_of_pages_from_pagination) != 0 else None
-=======
-    last_page_from_pagination = list_of_pages_from_pagination[-1].text if len(list_of_pages_from_pagination) != 0 else None
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
+
     return int(last_page_from_pagination) if last_page_from_pagination else None
 
 
 def retrieving_additional_information_about_object_from_description(parsed_data, type_of_object):
     object_characteristics_tags = parsed_data.find('span', class_=re.compile('Value'))
-<<<<<<< HEAD
+
     if object_characteristics_tags is not None:
-=======
-    if object_characteristics_tags:
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
         object_characteristics_tags = parsed_data.find_all('span', class_=re.compile('Value'))
 
         number_finder = re.compile('[0-9.]+')
@@ -49,19 +40,13 @@ def retrieving_additional_information_about_object_from_description(parsed_data,
                 floor_number, total_number_of_floors = list_with_information_about_floors
             else:
                 floor_number, total_number_of_floors = list_with_information_about_floors, None
-<<<<<<< HEAD
+
             return {
                 'number_of_rooms': number_of_rooms,
                 'total_space': total_space,
                 'floor_number': floor_number,
                 'total_number_of_floors': total_number_of_floors,
             }
-=======
-            return {'number_of_rooms': number_of_rooms,
-                    'total_space': total_space,
-                    'floor_number': floor_number,
-                    'total_number_of_floors': total_number_of_floors, }
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
         elif len(object_characteristics_tags) == 4:
             number_of_rooms = object_characteristics_tags[0].text
             total_space = number_finder.search(object_characteristics_tags[1].text).group(0)
@@ -71,7 +56,7 @@ def retrieving_additional_information_about_object_from_description(parsed_data,
                 floor_number, total_number_of_floors = list_with_information_about_floors
             else:
                 floor_number, total_number_of_floors = list_with_information_about_floors, None
-<<<<<<< HEAD
+
             return {
                 'number_of_rooms': number_of_rooms,
                 'total_space': total_space,
@@ -79,13 +64,7 @@ def retrieving_additional_information_about_object_from_description(parsed_data,
                 'floor_number': floor_number,
                 'total_number_of_floors': total_number_of_floors,
             }
-=======
-            return {'number_of_rooms': number_of_rooms,
-                    'total_space': total_space,
-                    'living_space': living_space,
-                    'floor_number': floor_number,
-                    'total_number_of_floors': total_number_of_floors, }
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
+
         elif len(object_characteristics_tags) == 2:
             number_of_rooms = object_characteristics_tags[0].text
             list_with_information_about_floors = number_finder.findall(object_characteristics_tags[1].text)
@@ -93,19 +72,13 @@ def retrieving_additional_information_about_object_from_description(parsed_data,
                 floor_number, total_number_of_floors = list_with_information_about_floors
             else:
                 floor_number, total_number_of_floors = list_with_information_about_floors, None
-<<<<<<< HEAD
+
             return {
                 'number_of_rooms': number_of_rooms,
                 'floor_number': floor_number,
                 'total_number_of_floors': total_number_of_floors,
             }
         else:
-=======
-            return {'number_of_rooms': number_of_rooms,
-                    'floor_number': floor_number,
-                    'total_number_of_floors': total_number_of_floors, }
-        else:       
->>>>>>> 27c45050cc1c2e9def9983164f8900d742a187c1
             return {
                 'number_of_rooms': None,
                 'total_space': None,
@@ -226,81 +199,79 @@ def item_parser(url, estate_type, proxie):
 
     num_searcher = re.compile(r"[+-]?\d+(?:\.\d+)?")
     price_from_description = s_data.find("div", class_=re.compile('_price'))
-    list_of_numbers_from_string = num_searcher.findall(price_from_description.text.strip()) if price_from_description else None
+    list_of_numbers_from_string = num_searcher.findall(
+        price_from_description.text.strip()) if price_from_description else None
     price = float(''.join(list_of_numbers_from_string)) if list_of_numbers_from_string else None
-    
+
     date = date_retrieved_from_object_info(s_data)
 
     return {
-            'type':estate_type,
-            'obj_address':adress_description.text.strip() if adress_description else None,
-            'metro_station':metro_station_near_object,
+            'type': estate_type,
+            'obj_address': adress_description.text.strip() if adress_description else None,
+            'metro_station': metro_station_near_object,
             'name': name_node.text.strip() if name_node else None,
-            'area': additional_information_about_object_in_item.get('total_space') if 
-                        additional_information_about_object_in_item else None,
-            'rooms': additional_information_about_object_in_item.get('number_of_rooms') if 
-                        additional_information_about_object_in_item else None,
-            'floor': additional_information_about_object_in_item.get('floor_number') if 
-                        additional_information_about_object_in_item else None,          
-            'price':price,
-            'href':url,
-            'source':'irr',
-            'date':date,
-            }
-    
+            'area': additional_information_about_object_in_item.get(
+                'total_space') if additional_information_about_object_in_item else None,
+            'rooms': additional_information_about_object_in_item.get(
+                'number_of_rooms') if additional_information_about_object_in_item else None,
+            'floor': additional_information_about_object_in_item.get(
+                'floor_number') if additional_information_about_object_in_item else None,
+            'price': price,
+            'href': url,
+            'source': 'irr',
+            'date': date, }
+
 
 def main():
-    
+
     links_for_parser = [('http://irr.ru/real-estate/apartments-sale/', 'AS'),
-                    ('http://irr.ru/real-estate/rooms-sale/', 'RS'),
-                    ('http://irr.ru/real-estate/rent/', 'AR'),
-                    ('http://irr.ru/real-estate/rooms-rent/', 'RR')]
-    #new_proxie_list = read_proxie_list('proxies.txt')
-    result = [] 
-    print ("Started retrieving pages...\n\n")
+                        ('http://irr.ru/real-estate/rooms-sale/', 'RS'),
+                        ('http://irr.ru/real-estate/rent/', 'AR'),
+                        ('http://irr.ru/real-estate/rooms-rent/', 'RR')]
+
+    result = []
+    print("Started retrieving pages...\n\n")
     link_cnt = 0
-    print ('I have {} links'.format(len(links_for_parser)))
+    print('I have {} links'.format(len(links_for_parser)))
     for link in range(len(links_for_parser)):
-        #new_proxie = {'http':'{}'.format(random.choice(new_proxie_list))}
-        new_proxie = {'http':'85.26.146.169:80'}
-        link_cnt +=1
-        print ('Parsing link № {}...'.format(link_cnt))
+        new_proxie = {'http': '85.26.146.169:80'}
+        link_cnt += 1
+        print('Parsing link № {}...'.format(link_cnt))
         base_link = links_for_parser[link][0]
-        print (base_link)       
-        item_list_from_base_link = urls_for_items(base_link,new_proxie) 
-        last_page_from_pagination = retrieving_last_possible_page(base_link,new_proxie)     
-        print ("Total number of pages is {}".format(last_page_from_pagination))
-        print ("First page...")
+        print(base_link)
+        item_list_from_base_link = urls_for_items(base_link, new_proxie)
+        last_page_from_pagination = retrieving_last_possible_page(base_link, new_proxie)
+        print("Total number of pages is {}".format(last_page_from_pagination))
+        print("First page...")
         try:
-            for j in range(len(item_list_from_base_link)):          
-                result.append(item_parser(item_list_from_base_link[j],links_for_parser[link][1],new_proxie))               
-            print ('First page retreived')
+            for j in range(len(item_list_from_base_link)):
+                result.append(item_parser(item_list_from_base_link[j], links_for_parser[link][1], new_proxie))
+            print('First page retreived')
         except IOError:
             break
         page_counter = 1
         try:
-            for num in range(page_counter+1,last_page_from_pagination+1):           
-                if page_counter == last_page_from_pagination+1:
+            for num in range(page_counter + 1, last_page_from_pagination + 1):
+                if page_counter == last_page_from_pagination + 1:
                     break
                 page_counter += 1
-                work_link = '{}{}{}{}'.format(base_link,'page',num,'/')
-                print (work_link)
-                item_list_work_link = urls_for_items(work_link,new_proxie)         
-                print ('Parsing page № {}...'.format(page_counter))
-                #test_item_cnt = 0
+                work_link = '{}{}{}{}'.format(base_link, 'page', num, '/')
+                print(work_link)
+                item_list_work_link = urls_for_items(work_link, new_proxie)
+                print('Parsing page № {}...'.format(page_counter))
                 item_cnt = 0
                 try:
                     for k in range(len(item_list_work_link)):
-                        print ('Parsing item № {}...'.format(item_cnt))
-                        print (item_list_work_link[k])
-                        result.append(item_parser(item_list_work_link[k],links_for_parser[link][1],new_proxie))
-                        item_cnt +=1
-                    print ('Page № {} retreived\n'.format(page_counter))
+                        print('Parsing item № {}...'.format(item_cnt))
+                        print(item_list_work_link[k])
+                        result.append(item_parser(item_list_work_link[k], links_for_parser[link][1], new_proxie))
+                        item_cnt += 1
+                    print('Page № {} retreived\n'.format(page_counter))
                 except IOError:
-                    print ("Information about objects has been obtained until the position № {}".format(item_cnt))
+                    print("Information about objects has been obtained until the position № {}".format(item_cnt))
                     break
         except IOError:
-            print ("Pages has been obtained until page № {}".format(page_counter))
+            print("Pages has been obtained until page № {}".format(page_counter))
             break
     result.append((dt_.now()).strftime("%d-%m-%Y %H:%M:%S"))
     into_json_(result)
